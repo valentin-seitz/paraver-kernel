@@ -721,7 +721,9 @@ KTrace::KTrace( const string& whichFile, ProgressController *progress, bool noLo
   {
     file->clear();
   }
-
+  if(whichFile.find(".sorted.") != std::string::npos){
+    blocks->setIsSorted(true);
+  }
   blocks->setFileLoaded( traceEndTime );
 
   ready = true;

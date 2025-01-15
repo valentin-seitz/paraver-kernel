@@ -360,6 +360,11 @@ TRecordTime VectorBlocks::getLastRecordTime() const
 
 void VectorBlocks::setFileLoaded( TRecordTime traceEndTime )
 {
+
+  if(isSorted){
+    return;
+  }
+  
   TRecord beginEmptyRecord;
   beginEmptyRecord.type = EMPTYREC;
   beginEmptyRecord.time = 0.0;

@@ -33,9 +33,8 @@
 class MemoryBlocks
 {
   public:
-    MemoryBlocks()
+    MemoryBlocks() : countInserted(0), isSorted(false)
     {
-      countInserted = 0;
     }
 
     virtual ~MemoryBlocks()
@@ -113,12 +112,17 @@ class MemoryBlocks
       countInserted = 0;
     }
 
+    virtual void setIsSorted(bool sorted){
+      isSorted=sorted;
+    }
+
     virtual void setFileLoaded( TRecordTime traceEndTime )
     {}
 
   protected:
     // Number of new records inserted in the last operation
     PRV_UINT32 countInserted;
+    bool isSorted;
 
   private:
 };
