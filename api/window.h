@@ -27,6 +27,7 @@
 
 #include <string>
 #include <map>
+#include <memory>
 
 #include "paraverkerneltypes.h"
 #include "semanticcolor.h"
@@ -1237,7 +1238,7 @@ class TimelineProxy: public Timeline
   private:
     Timeline *myWindow;
 #ifdef PARALLEL_ENABLED
-    std::vector<Timeline *> parallelClone;
+    std::vector<std::unique_ptr<Timeline>> parallelClone;
 #endif // PARALLEL_ENABLED
 
     Trace *myTrace;
