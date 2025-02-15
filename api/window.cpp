@@ -537,10 +537,13 @@ void TimelineProxy::computeYScale( ProgressController *progress )
     tmpComputedMinY.reserve( selected.size() );
     tmpComputedZeros.reserve( selected.size() );
 
-    #pragma omp parallel master default(none) shared(currentObject, progressSteps, progress, \
+    #pragma omp parallel default(none) shared(currentObject, progressSteps, progress, \
                                                      myWindow, parallelClone, selected, \
                                                      tmpComputedMaxY, tmpComputedMinY, tmpComputedZeros)
+
     {
+      #pragma omp master
+      {
 #ifdef PARALLEL_ENABLED
       if( selected.size() > 1 ||
           ( myWindow->isDerivedWindow() && myWindow->getTrace()->getLevelObjects( myWindow->getParent( 0 )->getLevel() ) !=
@@ -594,7 +597,8 @@ void TimelineProxy::computeYScale( ProgressController *progress )
             }
           }
         }
-      }
+        }
+      } // master
     } // omp parallel
 
     for ( int pos = 0; pos < selected.size(); ++pos )
@@ -2248,11 +2252,13 @@ void TimelineProxy::computeSemanticParallel( vector< TObjectOrder >& selectedSet
   }
 
   // Drawmode: Group objects with same wxCoord in objectPosList
-  #pragma omp parallel master default(none) shared(paramProgress, selectedSet, selected, objectPosList,\
+  #pragma omp parallel default(none) shared(paramProgress, selectedSet, selected, objectPosList,\
                                             tmpDrawCaution, tmpComputedMaxY, tmpComputedMinY, tmpComputedZeros, \
                                             valuesToDraw, eventsToDraw, commsToDraw, myWindow, parallelClone, \
                                             timePos, maxObj, drawCaution, timeStep, numRows, objectAxisPos)
   {
+    #pragma omp master
+    {
 #ifdef PARALLEL_ENABLED
     if( selected.size() > 1 ||
         ( myWindow->isDerivedWindow() && myWindow->getTrace()->getLevelObjects( myWindow->getParent( 0 )->getLevel() ) !=
@@ -2348,7 +2354,8 @@ void TimelineProxy::computeSemanticParallel( vector< TObjectOrder >& selectedSet
 
       } // end if numRows
 
-    } // end for selectedSet
+    }// end for selectedSet
+    }
 
   } // end omp parallel
 
